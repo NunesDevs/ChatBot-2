@@ -1,0 +1,78 @@
+{
+    "intents": [
+        {
+            "tag": "greeting",
+            "patterns": [
+                "Ol\u00e1",
+                "Oi",
+                "E a\u00ed?",
+                "Como vai?",
+                "Oi, tudo bem?"
+            ],
+            "responses": [
+                "Ol\u00e1! Como posso te ajudar hoje?",
+                "Oi! Em que posso te ajudar?",
+                "Ol\u00e1, tudo bem? O que voc\u00ea precisa?"
+            ]
+        },
+        {
+            "tag": "goodbye",
+            "patterns": [
+                "Tchau",
+                "At\u00e9 logo",
+                "Adeus",
+                "Falou"
+            ],
+            "responses": [
+                "At\u00e9 mais!",
+                "Tchau! Volte sempre!",
+                "At\u00e9 logo! Tenha um bom dia!"
+            ]
+        },
+        {
+            "tag": "thanks",
+            "patterns": [
+                "Obrigado",
+                "Agrade\u00e7o",
+                "Valeu",
+                "Muito obrigado"
+            ],
+            "responses": [
+                "De nada!",
+                "Fico feliz em ajudar!",
+                "Disponha!"
+            ]
+        },
+        {
+            "tag": "faq",
+            "patterns": [
+                "O que \u00e9 o seu servi\u00e7o?",
+                "Como funciona o chatbot?",
+                "O que voc\u00ea pode fazer?"
+            ],
+            "responses": [
+                "Sou um chatbot, e posso responder suas perguntas e te ajudar com informa\u00e7\u00f5es.",
+                "Eu sou um assistente automatizado que pode te ajudar com v\u00e1rias quest\u00f5es."
+            ]
+        },
+        {
+            "tag": "custom_intent",
+            "patterns": [
+                "Como posso adicionar uma nova pergunta?",
+                "Quero criar uma nova pergunta"
+            ],
+            "responses": [
+                "Voc\u00ea pode me perguntar coisas e eu vou aprender com a sua pergunta. Se eu n\u00e3o souber a resposta, vou aprender com ela!"
+            ]
+        },
+        {
+            "tag": "conversa",
+            "patterns": [
+                "tudo bem?"
+            ],
+            "responses": [
+                "sim e voce?"
+            ]
+        }
+    ]
+}

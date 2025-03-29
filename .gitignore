@@ -1,0 +1,32 @@
+# Ignorar a pasta do ambiente virtual
+thingy/
+
+# Ignorar pastas e arquivos específicos do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+
+# Ignorar o arquivo do modelo treinado
+model/chatbot_model.h5
+
+# Ignorar arquivos gerados por pacotes de gerenciamento de dependências
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Ignorar arquivos temporários do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Ignorar arquivos de configuração do IDE (ex: PyCharm, VS Code)
+.idea/
+.vscode/
+
+# Ignorar arquivos de log
+*.log

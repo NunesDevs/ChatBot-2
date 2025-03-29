@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot FAQ</title>
+    <style>
+        /* Reset de margin e padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos gerais do corpo */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Container principal do chatbot */
+        #chatbox {
+            width: 100%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 70vh;
+            max-height: 600px;
+        }
+
+        /* Área do chatlog (onde as mensagens são exibidas) */
+        #chatlog {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+
+        /* Estilo para as mensagens do usuário */
+        .user-message {
+            text-align: right;
+            background-color: #c0e4ff;
+            color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 5px 0;
+            max-width: 80%;
+            margin-left: auto;
+        }
+
+        /* Estilo para as mensagens do chatbot */
+        .chatbot-message {
+            text-align: left;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 5px 0;
+            max-width: 80%;
+            margin-right: auto;
+        }
+
+        /* Estilo do campo de entrada de texto */
+        #user_input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        /* Estilo do botão de envio */
+        #send_button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #send_button:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilos para quando a página for visualizada em dispositivos móveis */
+        @media (max-width: 600px) {
+            #chatbox {
+                width: 100%;
+                height: 90vh;
+            }
+
+            #user_input {
+                font-size: 14px;
+            }
+
+            #send_button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="chatbox">
+        <div id="chatlog"></div>
+        <input type="text" id="user_input" placeholder="Digite sua mensagem...">
+        <button id="send_button">Enviar</button>
+    </div>
+
+    <script>
+        document.getElementById('send_button').addEventListener('click', function() {
+            const userMessage = document.getElementById('user_input').value;
+            if (userMessage.trim() === '') return;
+
+            // Mostrar a mensagem do usuário no chatlog
+            document.getElementById('chatlog').innerHTML += `<div class="user-message">${userMessage}</div>`;
+
+            // Processar comando de aprendizado
+            if (userMessage.startsWith('!ensinar')) {
+                let parts = userMessage.split(';');
+                if (parts.length === 3) {
+                    let newTag = parts[0].replace('!ensinar', '').trim();
+                    let newMessage = parts[1].trim();
+                    let newResponse = parts[2].trim();
+
+                    // Enviar dados de aprendizado para o servidor
+                    fetch('/learn', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: newMessage,
+                            tag: newTag,
+                            response: newResponse
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Mostrar resposta do bot após aprender
+                        document.getElementById('chatlog').innerHTML += `<div class="chatbot-message">${data.response}</div>`;
+                        scrollToBottom();
+                    })
+                    .catch(error => console.error('Erro ao ensinar:', error));
+                } else {
+                    document.getElementById('chatlog').innerHTML += `<div class="chatbot-message">Formato inválido. Use: !ensinar [tag] ; [mensagem] ; [resposta]</div>`;
+                    scrollToBottom();
+                }
+            } else {
+                // Enviar mensagem normal para o chatbot
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: userMessage })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Mostrar resposta do chatbot no chatlog
+                    document.getElementById('chatlog').innerHTML += `<div class="chatbot-message">${data.response}</div>`;
+                    scrollToBottom();
+                })
+                .catch(error => console.error('Erro ao enviar a mensagem:', error));
+            }
+
+            // Limpar o campo de entrada
+            document.getElementById('user_input').value = '';
+        });
+
+        // Função para rolar para o fim do chatlog
+        function scrollToBottom() {
+            const chatlog = document.getElementById('chatlog');
+            chatlog.scrollTop = chatlog.scrollHeight;
+        }
+
+        // Opcional: enviar mensagem ao pressionar a tecla Enter
+        document.getElementById('user_input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('send_button').click();
+            }
+        });
+    </script>
+</body>
+</html>
