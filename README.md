@@ -21,7 +21,7 @@ Este é um chatbot interativo para responder a perguntas frequentes (FAQ), com a
 ## Estrutura do Projeto
 
 ```
-chatbot-faq/
+ChatBot-2/
 │
 ├──model/ 
 │   ├── words.pkl   
