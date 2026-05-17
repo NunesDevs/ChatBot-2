@@ -30,3 +30,16 @@ Thumbs.db
 
 # Ignorar arquivos de log
 *.log
+
+# Jarvis safety
+.env
+.env.local
+.env.*.local
+node_modules/
+.next/
+coverage/
+.venv/
+uploads/
+tmp/
+temp/
+cache/
