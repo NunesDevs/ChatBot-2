@@ -1,4 +1,3 @@
-
 # Chatbot FAQ com Aprendizado Dinâmico
 
 Este é um chatbot interativo para responder a perguntas frequentes (FAQ), com a capacidade de aprender novas intenções diretamente a partir do chat. O bot pode ser treinado em tempo real sem a necessidade de re-treinamento manual, utilizando um comando especial para adicionar novas intenções.
@@ -92,3 +91,37 @@ Sinta-se à vontade para contribuir com este projeto. Abra um *pull request* ou 
 ## Licença
 
 Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## Operação e arquitetura verificadas
+
+app.py carrega vocabulário Pickle e modelo Keras, expõe /chat e /learn; train.py também oferece treinamento. Intenções são mantidas em intents.json.
+
+Arquivos principais: `app.py`, `train.py`, `intents.json`, `templates/index.html`.
+
+### Requisitos e execução
+
+Python e versões compatíveis de TensorFlow, NumPy e NLTK conforme requirements.txt.
+
+```text
+python -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python app.py
+```
+
+
+
+### Testes e estado
+
+Não foi identificada uma suíte automatizada específica para os fluxos descritos; valide a execução e os casos de borda antes de publicar.
+
+Estado: projeto de estudo/experimental. Deploy ativo não foi confirmado nesta revisão.
+
+### Limitações conhecidas
+
+- POST /learn altera dados e inicia treinamento sem autenticação; restringir a ambiente controlado.
+- O servidor está configurado com debug e bind 0.0.0.0.
+- Downloads NLTK e treinamento têm efeitos em disco e rede; não foram executados na auditoria.
+
+### Licença e manutenção
+
+Consulte o arquivo `LICENSE` existente. Atualize comandos e limitações quando houver mudança de comportamento.
