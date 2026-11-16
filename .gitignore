@@ -12,6 +12,8 @@ venv/
 
 # Ignorar o arquivo do modelo treinado
 model/chatbot_model.h5
+model-trained/
+*.json.lock
 
 # Ignorar arquivos gerados por pacotes de gerenciamento de dependências
 *.egg-info/
@@ -43,3 +45,6 @@ uploads/
 tmp/
 temp/
 cache/
+
+# Local browser evidence and disposable fixtures
+reports/qa/

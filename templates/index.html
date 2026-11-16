@@ -1,202 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot FAQ</title>
-    <style>
-        /* Reset de margin e padding */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Estilos gerais do corpo */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        /* Container principal do chatbot */
-        #chatbox {
-            width: 100%;
-            max-width: 600px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            height: 70vh;
-            max-height: 600px;
-        }
-
-        /* Área do chatlog (onde as mensagens são exibidas) */
-        #chatlog {
-            flex-grow: 1;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fafafa;
-        }
-
-        /* Estilo para as mensagens do usuário */
-        .user-message {
-            text-align: right;
-            background-color: #c0e4ff;
-            color: #333;
-            padding: 10px;
-            border-radius: 10px;
-            margin: 5px 0;
-            max-width: 80%;
-            margin-left: auto;
-        }
-
-        /* Estilo para as mensagens do chatbot */
-        .chatbot-message {
-            text-align: left;
-            background-color: #f0f0f0;
-            color: #333;
-            padding: 10px;
-            border-radius: 10px;
-            margin: 5px 0;
-            max-width: 80%;
-            margin-right: auto;
-        }
-
-        /* Estilo do campo de entrada de texto */
-        #user_input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-        }
-
-        /* Estilo do botão de envio */
-        #send_button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        #send_button:hover {
-            background-color: #45a049;
-        }
-
-        /* Estilos para quando a página for visualizada em dispositivos móveis */
-        @media (max-width: 600px) {
-            #chatbox {
-                width: 100%;
-                height: 90vh;
-            }
-
-            #user_input {
-                font-size: 14px;
-            }
-
-            #send_button {
-                font-size: 14px;
-            }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script defer src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+{% if editing_enabled %}<script defer src="{{ url_for('static', filename='js/teacher.js') }}"></script>{% endif %}
+<title>Assistente de intenções</title>
 </head>
-<body>
-
-    <div id="chatbox">
-        <div id="chatlog"></div>
-        <input type="text" id="user_input" placeholder="Digite sua mensagem...">
-        <button id="send_button">Enviar</button>
-    </div>
-
-    <script>
-        document.getElementById('send_button').addEventListener('click', function() {
-            const userMessage = document.getElementById('user_input').value;
-            if (userMessage.trim() === '') return;
-
-            // Mostrar a mensagem do usuário no chatlog
-            document.getElementById('chatlog').innerHTML += `<div class="user-message">${userMessage}</div>`;
-
-            // Processar comando de aprendizado
-            if (userMessage.startsWith('!ensinar')) {
-                let parts = userMessage.split(';');
-                if (parts.length === 3) {
-                    let newTag = parts[0].replace('!ensinar', '').trim();
-                    let newMessage = parts[1].trim();
-                    let newResponse = parts[2].trim();
-
-                    // Enviar dados de aprendizado para o servidor
-                    fetch('/learn', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            message: newMessage,
-                            tag: newTag,
-                            response: newResponse
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        // Mostrar resposta do bot após aprender
-                        document.getElementById('chatlog').innerHTML += `<div class="chatbot-message">${data.response}</div>`;
-                        scrollToBottom();
-                    })
-                    .catch(error => console.error('Erro ao ensinar:', error));
-                } else {
-                    document.getElementById('chatlog').innerHTML += `<div class="chatbot-message">Formato inválido. Use: !ensinar [tag] ; [mensagem] ; [resposta]</div>`;
-                    scrollToBottom();
-                }
-            } else {
-                // Enviar mensagem normal para o chatbot
-                fetch('/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ message: userMessage })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Mostrar resposta do chatbot no chatlog
-                    document.getElementById('chatlog').innerHTML += `<div class="chatbot-message">${data.response}</div>`;
-                    scrollToBottom();
-                })
-                .catch(error => console.error('Erro ao enviar a mensagem:', error));
-            }
-
-            // Limpar o campo de entrada
-            document.getElementById('user_input').value = '';
-        });
-
-        // Função para rolar para o fim do chatlog
-        function scrollToBottom() {
-            const chatlog = document.getElementById('chatlog');
-            chatlog.scrollTop = chatlog.scrollHeight;
-        }
-
-        // Opcional: enviar mensagem ao pressionar a tecla Enter
-        document.getElementById('user_input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('send_button').click();
-            }
-        });
-    </script>
+<body data-chat-url="{{ url_for('chat') }}" data-learn-url="{{ url_for('learn') }}">
+<main class="container">
+<header>
+<p class="eyebrow">Experimento</p>
+<h1>Assistente de intenções</h1>
+<p class="description">Converse com o assistente a partir das intenções cadastradas.</p>
+</header>
+<p class="mode{% if editing_enabled %} editable{% endif %}">{% if editing_enabled %}Edição autorizada{% else %}Somente leitura{% endif %}</p>
+<section class="chat-container" aria-labelledby="conversation-heading">
+<div class="chat-heading{% if editing_enabled %} with-editor{% endif %}">
+<h2 id="conversation-heading">Conversa</h2>
+<div class="chat-actions">
+<button id="clear" type="button">Limpar</button>
+{% if editing_enabled %}<button id="teach" type="button" aria-haspopup="dialog">Ensinar</button>{% endif %}
+</div>
+</div>
+<div id="chatbox" class="chatbox" role="log" aria-label="Mensagens da conversa" aria-live="polite" aria-relevant="additions" aria-busy="false"></div>
+<div class="suggestions" role="group" aria-label="Perguntas sugeridas">
+<button type="button" data-question="Olá">Olá</button>
+<button type="button" data-question="O que você pode fazer?">Ajuda</button>
+</div>
+<form id="chat_form" novalidate>
+<label for="user_input">Sua pergunta</label>
+<input type="text" id="user_input" maxlength="500" autocomplete="off" placeholder="Digite sua mensagem…" aria-describedby="chat_status" required>
+<button id="send" class="primary" type="submit">Enviar</button>
+</form>
+<p id="chat_status" class="small" data-state="ready" role="status" aria-live="polite">Enter para enviar. Até 500 caracteres.</p>
+</section>
+<p class="small">Respostas locais de demonstração com intenções cadastradas por operadores autorizados.</p>
+</main>
+{% if editing_enabled %}
+<dialog id="teach_dialog" aria-labelledby="teach-heading" aria-describedby="teach-help">
+<div class="dialog-content">
+<div class="dialog-heading">
+<h2 id="teach-heading">Ensinar intenção</h2>
+<button id="close_teach" type="button">Fechar</button>
+</div>
+<p id="teach-help" class="description">Cadastre um padrão e sua resposta com a chave fornecida pelo operador.</p>
+<form id="teach_form">
+<div class="field">
+<label for="operator_key">Chave de edição</label>
+<input id="operator_key" name="operator_key" type="password" placeholder="A chave não será armazenada" autocomplete="off" minlength="32" maxlength="128" pattern="[A-Za-z0-9._~\-]{32,128}" required>
+</div>
+<div class="field">
+<label for="intent_tag">Tag da intenção</label>
+<input id="intent_tag" name="tag" placeholder="Ex.: saudacao" autocomplete="off" pattern="[a-z][a-z0-9_]{0,63}" maxlength="64" aria-describedby="teach-constraints" required>
+</div>
+<div class="field">
+<label for="intent_pattern">Pergunta ou padrão</label>
+<input id="intent_pattern" name="message" placeholder="Ex.: Qual é o horário?" autocomplete="off" maxlength="500" required>
+</div>
+<div class="field">
+<label for="intent_response">Resposta</label>
+<textarea id="intent_response" name="response" placeholder="Escreva a resposta do assistente." maxlength="2000" required></textarea>
+</div>
+<p id="teach-constraints" class="small">Use até 500 caracteres na pergunta e 2.000 na resposta. Tags começam com a–z e aceitam a–z, 0–9 e sublinhado.</p>
+<div class="teach-actions">
+<button id="save_teach" type="submit" class="primary">Salvar intenção</button>
+<button id="cancel_teach" type="button">Cancelar</button>
+</div>
+</form>
+<p id="teach_status" class="small" role="status" aria-live="polite">A base local é atualizada. O treinamento neural é executado separadamente pelo operador.</p>
+</div>
+</dialog>
+{% endif %}
 </body>
 </html>

@@ -1,30 +1,5 @@
-# Deploy
+# Distribuição e execução
 
-Documentar:
-- Variáveis de ambiente
-- Banco de dados
-- Docker
-- Build
-- Migrations
-- VPS
-- Nginx
-- SSL
-- Backup
+Aplicação local via python app.py em 127.0.0.1:5000, debug desativado. Não há banco nem migração. O pacote de release deve conter fontes revisadas, templates, static/fontes/licenças, base demonstrativa, testes e requirements*. Excluir .env, Pickles legados, modelos treinados, ambientes e dados locais.
 
-<!-- AUTO-GENERATED:START -->
-## Scripts detectados
-Nenhum script detectado.
-
-## Regra
-- Nunca fazer deploy sem autorização explícita.
-<!-- AUTO-GENERATED:END -->
-
-<!-- JARVIS-AUTO:START -->
-## Deploy
-- Deploy automático proibido.
-- Validar variáveis de ambiente.
-- Rodar build/test antes de qualquer publicação.
-
-## Scripts relacionados
-- Nenhum script detectado.
-<!-- JARVIS-AUTO:END -->
+Siga o README para instalação com hashes, edição opcional e treinamento. Não use o servidor de desenvolvimento como serviço público. Uma publicação remota futura precisa servidor WSGI, HTTPS, controle de acesso e limites próprios; nenhum destino remoto foi inventado nesta revisão.

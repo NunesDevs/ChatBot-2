@@ -1,46 +1,9 @@
-# Segurança
+# Segurança e operação
 
-- app.py contém termo sensível: token
-- CLAUDE.md contém termo sensível: secret
-- train.py contém termo sensível: token
-- docs\ai-context\LAST_ANALYSIS.md contém termo sensível: token
-- docs\ai-context\PROJECT.md contém termo sensível: secret
-- docs\ai-context\PROMPTS.md contém termo sensível: secret
-- docs\ai-context\SECURITY.md contém termo sensível: secret
+Edição desabilitada por padrão. Para ativar, o operador configura flag booleana e chave de 32 a 128 caracteres ASCII seguros. POST /learn exige Bearer em comparação constante; a chave nunca é renderizada nem persistida pelo cliente. Não habilite edição em hospedagem compartilhada sem controlar operadores e HTTPS.
 
-## Checklist
-- Verificar secrets.
-- Verificar autenticação.
-- Verificar autorização.
-- Verificar IDOR.
-- Verificar XSS.
-- Verificar SQL Injection.
-- Verificar CSRF.
-- Verificar rate limit.
-- Verificar uploads.
-- Verificar logs.
+Requisições limitadas a 16 KiB; mensagens de 1–500 caracteres e respostas de 1–2.000. Intenções validadas antes da escrita, conflitos de padrão rejeitados. Lock O_EXCL, arquivo temporário na mesma pasta, fsync e replace atômico; falhas preservam os dados anteriores. Um lock abandonado exige inspeção manual, sem apagamento automático de lock alheio.
 
-<!-- AUTO-GENERATED:START -->
-## Achados automáticos
-- `app.py` contém termo sensível: **token**
-- `CLAUDE.md` contém termo sensível: **secret**
-- `train.py` contém termo sensível: **token**
+Mensagens são textContent/text nodes, sem innerHTML. CSP somente mesma origem, sem código inline; no-store/nosniff/no-referrer; servidor de desenvolvimento somente loopback e sem debug. Não há downloads, treinamento nem unpickle em requisições.
 
-## Checklist
-- Verificar secrets.
-- Verificar autenticação e autorização.
-- Verificar IDOR, XSS, SQL Injection e CSRF quando aplicável.
-- Verificar uploads, logs e rate limit.
-<!-- AUTO-GENERATED:END -->
-
-<!-- JARVIS-AUTO:START -->
-## Alertas automáticos
-- `app.py` contém termo sensível: token
-- `CLAUDE.md` contém termo sensível: secret
-- `train.py` contém termo sensível: token
-
-## Regras obrigatórias
-- Nunca commitar `.env`.
-- Verificar secrets antes de commit.
-- Verificar autenticação, autorização, uploads e logs quando aplicável.
-<!-- JARVIS-AUTO:END -->
+Modelos devem ser produzidos e revisados pelo operador. SHA-256 confere integridade, não identifica a autoria de um arquivo não confiável. Metadados e arquivos são limitados; Keras safe_mode está habilitado. Não carregue modelos recebidos de terceiros. Não existe endpoint de upload de modelo.

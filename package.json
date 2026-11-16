@@ -1,0 +1,17 @@
+{
+  "name": "chatbot-2-qa",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test tests/chatbot.test.cjs tests/teacher.test.cjs",
+    "test:e2e": "node tests/e2e.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.64.1"
+  }
+}
